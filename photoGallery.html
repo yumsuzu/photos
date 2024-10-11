@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Photo Gallery</title>
+    <style>
+        img {
+            width: 300px;
+            height: 300px;
+            margin: 10px;
+            display: block;
+            cursor: pointer;
+        }
+        .photos {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+        }
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000; 
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.8); /* Background overlay */
+            display: flex; /* Flex to center image vertically */
+            justify-content: center; /* Horizontal center */
+            align-items: center; /* Vertical center */
+        }
+        .modal-content {
+            max-width: 80%; 
+            max-height: 80%; /* Limit height */
+            object-fit: contain; /* Maintain aspect ratio */
+            animation-name: zoom;
+            animation-duration: 0.6s;
+        }
+        @keyframes zoom {
+            from {transform: scale(0.1)} 
+            to {transform: scale(1)}
+        }
+        .close {
+            position: absolute;
+            top: 10px;
+            right: 25px;
+            color: white;
+            font-size: 35px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        #myModal {
+            display: none;
+        }
+    
+    </style>
+</head>
+<body>
+    <div class="photos"></div>
+
+    <!-- The Modal -->
+    <div id="myModal" class="modal">
+        <span class="close">&times;</span>
+        <img class="modal-content" id="modalImg">
+    </div>
+
+    <script>
+        const files = ['a.jpg','b.jpg','a.jpg','b.jpg','a.jpg','b.jpg','a.jpg','b.jpg','a.jpg','b.jpg'];
+        const len = files.length;
+        const photosDiv = document.querySelector(".photos");
+
+        for (let i = 0; i < len; i++) {
+            const img = document.createElement("img");
+            img.setAttribute('src', files[i]);
+            photosDiv.append(img);
+        }
+        
+
+        // Get the modal
+        const modal = document.getElementById("myModal");
+        const modalImg = document.getElementById("modalImg");
+        const closeSpan = document.querySelector(".close");
+
+        // Handle image click for enlarging
+        document.querySelectorAll(".photos img").forEach((img) => {
+            img.addEventListener("click", (e) => {
+                e.stopPropagation();
+                modal.style.display = "flex";  // Show modal (with flex for centering)
+                modalImg.src = e.target.src;   // Set clicked image in modal
+                modalImg.style.width="600px";
+                modalImg.style.height="auto";
+            });
+        });
+
+        // Close modal when clicking on the close button
+        closeSpan.addEventListener("click", () => {
+            modal.style.display = "none";  // Hide modal
+        });
+
+        // Close modal when clicking outside the image
+        window.addEventListener("click", (e) => {
+            if (e.target == modal) {
+                modal.style.display = "none";  // Hide modal
+            }
+        });
+    </script>
+
+    
+</body>
+</html>
